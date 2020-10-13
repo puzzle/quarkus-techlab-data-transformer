@@ -4,28 +4,34 @@ metadata:
   labels:
     application: quarkus-techlab
 items:
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      labels:
+        application: quarkus-techlab
+      name: data-transformer
 
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
       labels:
         application: quarkus-techlab
-      name: data-consumer
+      name: data-transformer
     spec:
       replicas: 1
       selector:
         matchLabels:
-          deployment: data-consumer
+          deployment: data-transformer
       strategy:
         type: Recreate
       template:
         metadata:
           labels:
             application: quarkus-techlab
-            deployment: data-consumer
+            deployment: data-transformer
         spec:
           containers:
-            - image: g1raffi/quarkus-techlab-data-consumer:jaegerkafka
+            - image: data-transformer:latest
               imagePullPolicy: Always
               livenessProbe:
                 failureThreshold: 5
@@ -47,7 +53,7 @@ items:
                 periodSeconds: 20
                 successThreshold: 1
                 timeoutSeconds: 15
-              name: data-consumer
+              name: data-transformer
               port:
                 - containerPort: 8080
                   name: http
@@ -64,10 +70,10 @@ items:
         - imageChangeParams:
             automatic: true
             containerNames:
-              - data-consumer
+              - data-transformer
             from:
               kind: ImageStreamTag
-              name: data-consumer:jaegerkafka
+              name: data-transformer:latest
           type: ImageChange
 
   - apiVersion: v1
@@ -75,15 +81,15 @@ items:
     metadata:
       labels:
         application: quarkus-techlab
-      name: data-consumer
+      name: data-transformer
     spec:
       ports:
-        - name: data-consumer-http
+        - name: data-transformer-http
           port: 8080
           protocol: TCP
           targetPort: 8080
       selector:
-        deployment: data-consumer
+        deployment: data-transformer
       sessionAffinity: None
       type: ClusterIP
           
