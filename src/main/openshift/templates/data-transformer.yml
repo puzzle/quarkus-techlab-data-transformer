@@ -12,7 +12,7 @@ items:
       name: data-transformer
     spec:
       lookupPolicy:
-        local: true1
+        local: true
 
   - apiVersion: apps/v1
     kind: Deployment
