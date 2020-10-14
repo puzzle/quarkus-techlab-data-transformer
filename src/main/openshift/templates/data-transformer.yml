@@ -10,6 +10,9 @@ items:
       labels:
         application: quarkus-techlab
       name: data-transformer
+    spec:
+      lookupPolicy:
+        local: true1
 
   - apiVersion: apps/v1
     kind: Deployment
