@@ -1,6 +1,6 @@
 package ch.puzzle.quarkustechlab.reactivetransformer.boundary;
 
-import ch.puzzle.quarkustechlab.reactivetransformer.entity.SensorMeasurement;
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
 import io.smallrye.reactive.messaging.kafka.IncomingKafkaRecordMetadata;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
