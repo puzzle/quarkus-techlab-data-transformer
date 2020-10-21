@@ -1,11 +1,6 @@
 package ch.puzzle.quarkustechlab.reactivetransformer.boundary;
 
-import ch.puzzle.quarkustechlab.reactivetransformer.control.HeadersMapExtractAdapter;
 import ch.puzzle.quarkustechlab.reactivetransformer.entity.SensorMeasurement;
-import io.opentracing.Scope;
-import io.opentracing.SpanContext;
-import io.opentracing.Tracer;
-import io.opentracing.propagation.Format;
 import io.smallrye.reactive.messaging.kafka.IncomingKafkaRecordMetadata;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
@@ -28,10 +23,6 @@ public class ReactiveDataTransformer {
     static double sum;
     static int count;
 
-    @Inject
-    Tracer tracer;
-
-
     @Counted(name = "messagesTransformed", description = "How many messages were transformed.")
     @Incoming("data")
     @Timed(name = "transformationTimer", description = "A measure of how long it takes to transform the data.", unit = MetricUnits.MILLISECONDS)
@@ -39,14 +30,10 @@ public class ReactiveDataTransformer {
         logger.info("Message received");
         Optional<IncomingKafkaRecordMetadata> metadata = message.getMetadata(IncomingKafkaRecordMetadata.class);
         if (metadata.isPresent()) {
-            SpanContext extract = tracer.extract(Format.Builtin.TEXT_MAP, new HeadersMapExtractAdapter(metadata.get().getHeaders()));
-            try (Scope scope = tracer.buildSpan("transform-data").asChildOf(extract).startActive(true)) {
-                sum += message.getPayload().data;
-                count++;
-                logger.info("Current average: " + sum / count);
-                tracer.scopeManager().active().close();
-                return message.ack();
-            }
+            sum += message.getPayload().data;
+            count++;
+            logger.info("Current average: " + sum / count);
+            return message.ack();
         }
         return message.nack(new RuntimeException());
     }
