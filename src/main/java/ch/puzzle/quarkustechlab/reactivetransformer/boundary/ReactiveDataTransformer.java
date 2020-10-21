@@ -1,7 +1,7 @@
 package ch.puzzle.quarkustechlab.reactivetransformer.boundary;
 
 import ch.puzzle.quarkustechlab.reactivetransformer.control.HeadersMapExtractAdapter;
-import ch.puzzle.quarkustechlab.reactivetransformer.entity.SensorMeasurement;
+import ch.puzzle.quarkustechlab.restconsumer.entity.SensorMeasurement;
 import io.opentracing.Scope;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
