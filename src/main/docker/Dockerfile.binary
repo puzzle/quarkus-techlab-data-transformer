@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi8/ubi
 WORKDIR /work/
 
 # Fetch the latest binary release from the GutHub release page
-RUN curl -L -o application https://github.com/puzzle/quarkus-techlab-data-transformer/releases/download/1.0.0/application
+RUN curl -L -o application https://github.com/puzzle/quarkus-techlab-data-transformer/releases/download/1.0.0-kafka/application
 
 RUN chmod -R 775 /work && chmod +x /work/application
 EXPOSE 8080
