@@ -1,19 +1,15 @@
 FROM registry.access.redhat.com/ubi8/ubi
 WORKDIR /work/
 
-#Install wget
-RUN yum install wget unzip -y
+# Install wget
+RUN yum install wget -y
 
-#Fetch the latest binary release from the GutHub release page
+# Fetch the latest binary release from the GutHub release page
 RUN wget https://github.com/puzzle/quarkus-techlab-data-transformer/releases/download/1.0.0/application
 
-# set up permissions for user `1001`
-RUN chmod 775 /work /work/application \
-  && chown -R 1001 /work \
-  && chmod -R "g+rwX" /work \
-  && chown -R 1001:root /work
-
+RUN chmod -R 775 /work
 EXPOSE 8080
-USER 1001
 
+# Run the application
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+
