@@ -50,7 +50,7 @@ Metrics (Prometheus):
 
 ### Enable Kafka
 
-Enable following configuration inside the [application.properties](src/main/resources/application.properties) file or by environment variables.
+Enable following configuration for the application.
 
 ```properties
 # Configure the SmallRye Kafka connector
@@ -60,6 +60,18 @@ kafka.bootstrap.servers=amm-techlab-kafka-bootstrap:9092
 mp.messaging.incoming.data.connector=smallrye-kafka
 mp.messaging.incoming.data.topic=manual
 mp.messaging.incoming.data.value.deserializer=ch.puzzle.quarkustechlab.reactivetransformer.control.SensorMeasurementDeserializer
+```
+
+Do it inside the [application.properties](src/main/resources/application.properties) file or by environment variables.
+
+Example run command:
+
+```s
+./mvnw -Dkafka.bootstrap.servers=localhost:9092 \
+  -Dmp.messaging.incoming.data.connector=smallrye-kafka \
+  -Dmp.messaging.incoming.data.topic=manual \
+  -Dmp.messaging.incoming.data.value.deserializer=ch.puzzle.quarkustechlab.reactivetransformer.control.SensorMeasurementDeserializer \
+  clean quarkus:dev
 ```
 
 ### Enable OpenTracing / Jaeger

@@ -7,6 +7,7 @@ import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.propagation.Format;
 import io.smallrye.reactive.messaging.kafka.IncomingKafkaRecordMetadata;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
@@ -28,6 +29,9 @@ public class ReactiveDataTransformer {
     static double sum;
     static int count;
 
+    @ConfigProperty(name = "quarkus.jaeger.enabled")
+    Boolean jaegerEnabled;
+
     @Inject
     Tracer tracer;
 
@@ -44,7 +48,9 @@ public class ReactiveDataTransformer {
                 sum += message.getPayload().data;
                 count++;
                 logger.info("Current average: " + sum / count);
-                tracer.scopeManager().active().close();
+                if (jaegerEnabled) {
+                    tracer.scopeManager().active().close();
+                }
                 return message.ack();
             }
         }
