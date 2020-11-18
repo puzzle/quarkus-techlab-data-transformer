@@ -44,7 +44,7 @@ items:
                   scheme: HTTP
                 initialDelaySeconds: 3
                 periodSeconds: 20
-                successThreshhold: 1
+                successThreshold: 1
                 timeoutSeconds: 15
               readinessProbe:
                 failureThreshold: 5
@@ -57,27 +57,29 @@ items:
                 successThreshold: 1
                 timeoutSeconds: 15
               name: data-transformer
+              env:
+                - name: kafka.bootstrap.servers
+                  value: 'amm-techlab-kafka-bootstrap:9092'
+                - name: mp.messaging.incoming.data.connector
+                  value: smallrye-kafka
+                - name: mp.messaging.incoming.data.topic
+                  value: manual
+                - name: mp.messaging.incoming.data.value.deserializer
+                  value: >-
+                    ch.puzzle.quarkustechlab.reactivetransformer.control.SensorMeasurementDeserializer
+                - name: quarkus.jaeger.enabled
+                  value: 'false'
               port:
                 - containerPort: 8080
                   name: http
                   protocol: TCP
               resources:
                 limits:
-                  cpu: 1
+                  cpu: '1'
                   memory: 500Mi
                 requests:
                   cpu: 50m
                   memory: 100Mi
-      triggers:
-        - type: ConfigChange
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - data-transformer
-            from:
-              kind: ImageStreamTag
-              name: data-transformer:latest
-          type: ImageChange
 
   - apiVersion: v1
     kind: Service
