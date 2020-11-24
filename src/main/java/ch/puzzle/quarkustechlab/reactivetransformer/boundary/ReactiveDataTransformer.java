@@ -44,7 +44,6 @@ public class ReactiveDataTransformer {
                 sum += message.getPayload().data;
                 count++;
                 logger.info("Current average: " + sum / count);
-                tracer.scopeManager().active().close();
                 return message.ack();
             }
         }
