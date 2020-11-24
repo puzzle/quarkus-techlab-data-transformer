@@ -49,7 +49,11 @@ public class ReactiveDataTransformer {
                 count++;
                 logger.info("Current average: " + sum / count);
                 if (jaegerEnabled) {
-                    tracer.scopeManager().active().close();
+                    logger.info("Got jaeger metadata: " + JsonbBuilder.create().toJson(message.getPayload()));
+                    Scope activeScope = tracer.scopeManager().active();
+                    if (activeScope != null) {
+                        activeScope.close();
+                    }
                 }
                 return message.ack();
             }
